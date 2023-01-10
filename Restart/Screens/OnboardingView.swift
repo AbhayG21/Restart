@@ -10,7 +10,7 @@ struct OnboardingView: View {
     //MARK: PROPERTY
     @AppStorage("onboarding") var isOnboardingViewActive : Bool=true;
     
-    @State private var buttonWidth: Double = UIScreen.main.bounds.width - 90
+    @State private var buttonWidth: Double = UIScreen.main.bounds.width - 80
     @State private var buttonOffset: CGFloat = 0;
     //MARK: BODY
     var body: some View {
