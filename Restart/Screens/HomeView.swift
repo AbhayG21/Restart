@@ -9,9 +9,11 @@ import SwiftUI
 
 struct HomeView: View {
     @AppStorage("onboarding") var isOnboardingViewActive : Bool=false;
+    @State var isAnimating:Bool = false
+    //MARK: - BODY
     var body: some View {
         VStack(spacing:20 ) {
-           //MARK:- HEADER
+           //MARK: - HEADER
             Spacer()
             ZStack {
                 CircleGroupView(ShapeColor: .gray, ShapeOpacity: 0.1)
@@ -19,8 +21,14 @@ struct HomeView: View {
                     .resizable()
                     .scaledToFit()
                 .padding()
+                .offset(y: isAnimating ? 35 : -35)
+                .animation(
+                    Animation
+                        .easeInOut(duration: 4)
+                        .repeatForever()
+                        ,value: isAnimating)
             }
-            //MARK:- CENTER
+            //MARK: - CENTER
             Text("The time that leads to mastery is dependent on the intensity of our focus.")
                 .font(.title3)
                 .fontWeight(.light)
@@ -28,10 +36,13 @@ struct HomeView: View {
                 .multilineTextAlignment(.center)
                 .padding()
             
-            //MARK:- FOOTER
+            //MARK: - FOOTER
             Spacer()
             Button(action:{
-                isOnboardingViewActive=true
+                withAnimation {
+                    isOnboardingViewActive = true
+                    playSound(sound: "success", type: "m4a")
+                }
             }){
                 Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
                     .imageScale(.large)
@@ -43,10 +54,15 @@ struct HomeView: View {
             .buttonStyle(.borderedProminent)
             .buttonBorderShape(.capsule)
             .controlSize(.large)
-        }
+        }//:VStack
+        .onAppear(perform: {
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.5 , execute:{
+                isAnimating = true
+            })
+        })
     }
 }
-
+//MARK: - PREVIEW
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
